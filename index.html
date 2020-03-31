@@ -81,7 +81,8 @@
                         </div>
                         <div class="card-body">
                             <form enctype="multipart/form-data">
-                                <input @change="filesChange($event.target);" class="btn btn-primary btn-lg btn-block" type="file">
+                                <input @change="filesChange($event.target);" class="btn btn-primary btn-lg btn-block"
+                                       type="file">
                             </form>
                         </div>
                     </div>
@@ -92,8 +93,10 @@
                             Step 3: Sync jobs
                         </div>
                         <div class="card-body">
-                            <button type="button" class="btn btn-primary btn-lg btn-block" :disabled="fileToUpload == null">Sync
-                                jobs</button>
+                            <button type="button" class="btn btn-primary btn-lg btn-block"
+                                    :disabled="fileToUpload == null" v-on:click="syncJobs">Sync
+                                jobs
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -184,7 +187,32 @@
 
                 if (this.fileToUpload == null || this.fileToUpload.size === 0) {
                     toastr.error("invalid file size");
-                    return
+                    // noinspection UnnecessaryReturnStatementJS
+                    return;
+                }
+            },
+            async syncJobs() {
+                if (!this.fileToUpload) {
+                    toastr.error("no file selected");
+                    return;
+                }
+
+                try {
+                    let formData = new FormData();
+                    formData.append("savefile", this.fileToUpload);
+                    formData.append("dlc", this.totalDlcValue);
+
+                    let resp = (await axios.post(`${this.apiUrl}/save_upload`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }));
+
+                    console.log(resp)
+                } catch (e) {
+                    console.log(e);
+
+                    toastr.error(e);
                 }
             }
         },
