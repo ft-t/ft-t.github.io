@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress JSUnfilteredForInLoop -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -33,104 +34,110 @@
     </style>
 </head>
 <body>
-<main class="container">
-    <div class="container h-100">
-        <div class="row h-100 justify-content-center align-items-center">
-            <div class="col-12">
-                <div class="d-flex justify-content-between">
-                    <div class="flex-column">
-                        <div class="alert alert-secondary" role="alert">
-                            Job List Generated AT 2020-03-29
+<div id="app">
+    {{totalDlcValue}}
+    <main class="container">
+        <div class="container h-100">
+            <div class="row h-100 justify-content-center align-items-center">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between">
+                        <div class="flex-column">
+                            <div class="alert alert-secondary" role="alert">
+                                Job List Generated AT 2020-03-29
+                            </div>
+                        </div>
+                        <div class="flex-column">
+                            <div class="alert alert-secondary" role="alert">
+                                Jobs for today : 123455
+                            </div>
                         </div>
                     </div>
-                    <div class="flex-column">
-                        <div class="alert alert-secondary" role="alert">
-                            Jobs for today : 123455
+                </div>
+                <div class="col-12">
+                    <div class="alert alert-primary" role="alert">
+                        You need to have g_save_format set to 2 in your game profile configuration<br>
+                        <a href="#" data-toggle="modal" data-target="#howto">How to do that</a>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            Step 1: Select owned DLC`s
+                        </div>
+                        <div class="card-body">
+                            <div class="form-check" v-for="dlc in allDlc">
+                                <input class="form-check-input" type="checkbox" v-model="dlc.IsSelected">
+                                <label class="form-check-label">
+                                    {{dlc.Name}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mt-3">
+                    <div class="card">
+                        <div class="card-header">
+                            Step 2: Upload file
+                        </div>
+                        <div class="card-body">
+                            <form enctype="multipart/form-data">
+                                <input @change="filesChange($event.target);" class="btn btn-primary btn-lg btn-block" type="file">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 my-3">
+                    <div class="card">
+                        <div class="card-header">
+                            Step 3: Sync jobs
+                        </div>
+                        <div class="card-body">
+                            <button type="button" class="btn btn-primary btn-lg btn-block" :disabled="fileToUpload == null">Sync
+                                jobs</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-12">
-                <div class="alert alert-primary" role="alert">
-                    You need to have g_save_format set to 2 in your game profile configuration<br>
-                    <a href="#" data-toggle="modal" data-target="#howto">How to do that</a>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        Step 1: Select owned DLC`s
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="px-3 d-flex justify-content-between">
+            <div class="flex-column">
+                <div class="btn-group dropup">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        English
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
                     </div>
                 </div>
             </div>
-            <div class="col-12 mt-3">
-                <div class="card">
-                    <div class="card-header">
-                        Step 2: Upload file
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
+            <div class="flex-column">
+                Copyright
             </div>
-            <div class="col-12 my-3">
-                <div class="card">
-                    <div class="card-header">
-                        Step 3: Sync jobs
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
+            <div class="flex-column justify-content-end">
+                <img style="height: 57px"
+                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Go_gopher_favicon.svg/1200px-Go_gopher_favicon.svg.png"
+                     alt="golang"/>
             </div>
         </div>
-    </div>
-</main>
-<footer class="footer">
-    <div class="px-3 d-flex justify-content-between">
-        <div class="flex-column">
-            <div class="btn-group dropup">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                    English
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                </div>
-            </div>
-        </div>
-        <div class="flex-column">
-            Copyright
-        </div>
-        <div class="flex-column justify-content-end">
-            <img style="height: 57px"
-                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Go_gopher_favicon.svg/1200px-Go_gopher_favicon.svg.png"
-                 alt="golang"/>
-        </div>
-    </div>
-</footer>
+    </footer>
 
-<div class="modal fade" id="howto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
+    <div class="modal fade" id="howto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
             </div>
         </div>
     </div>
@@ -145,5 +152,77 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"
+        integrity="sha256-bd8XIKzrtyJ1O5Sh3Xp3GiuMIzWC42ZekvrMMD4GxRg=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"
+        integrity="sha256-3blsJd4Hli/7wCQ+bmgXfOdK7p/ZUMtPXY08jmxSSgk=" crossorigin="anonymous"></script>
+<script>
+    window.toTitleCase = (str) => {
+        return str.split('_')
+            .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
+            .join(' ')
+    }
+</script>
+<script>
+    window.app = new Vue({
+        el: '#app',
+        data: {
+            //  apiUrl: "https://sync.qqw.ovh/",
+            apiUrl: "http://127.0.0.1:8080/",
+            message: 'Hello Vue!',
+            allDlc: [],
+            fileToUpload: null
+        },
+        methods: {
+            filesChange(e) {
+                if (e == null || e.files == null || e.files.length === 0) {
+                    toastr.error("invalid file");
+                    return;
+                }
+
+                this.fileToUpload = e.files[0];
+
+                if (this.fileToUpload == null || this.fileToUpload.size === 0) {
+                    toastr.error("invalid file size");
+                    return
+                }
+            }
+        },
+        computed: {
+            totalDlcValue() {
+                let total = 1;
+
+                if (!this.allDlc)
+                    return total;
+
+                for (let dlc of this.allDlc) {
+                    if (!dlc.IsSelected) {
+                        continue;
+                    }
+
+                    total |= dlc.Value
+                }
+
+                return total;
+            }
+        },
+        async created() {
+            try {
+                let values = (await axios.get(`${this.apiUrl}/dlc`)).data;
+                for (let item in values) {
+                    let value = values[item];
+
+                    if (value === 1) { // skip base game
+                        continue;
+                    }
+                    this.allDlc.push({Name: toTitleCase(item), Value: value, IsSelected: false});
+                }
+            } catch (e) {
+                toastr.error(e);
+                console.log(e);
+            }
+        }
+    })
+</script>
 </body>
 </html>
