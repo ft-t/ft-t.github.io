@@ -1,0 +1,10 @@
+{
+  "name": "test_html",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "lite-server"
+  },
+  "dependencies": {
+    "lite-server": "*"
+  }
+}
