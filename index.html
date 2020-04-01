@@ -65,11 +65,38 @@
                             Step 1: Select owned DLC`s
                         </div>
                         <div class="card-body">
-                            <div class="form-check" v-for="dlc in allDlc">
-                                <input class="form-check-input" type="checkbox" v-model="dlc.IsSelected">
-                                <label class="form-check-label">
-                                    {{dlc.Name}}
+                            <div class="card mb-1">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle text-muted mb-2">Map expansion DLCs</h6>
+                                    <div class="form-check" v-for="dlc in expansionDlc">
+                                        <input class="form-check-input" type="checkbox" v-model="dlc.IsSelected">
+                                        <label class="form-check-label">
+                                            {{dlc.Name}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-1">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle text-muted mb-2">Cargo pack DLCs</h6>
+                                    <div class="form-check" v-for="dlc in cargoDlc">
+                                        <input class="form-check-input" type="checkbox" v-model="dlc.IsSelected">
+                                        <label class="form-check-label">
+                                            {{dlc.Name}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-1">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle text-muted mb-2">Trailer DLCs</h6>
+                                    <div class="form-check" v-for="dlc in trailerDlc">
+                                        <input class="form-check-input" type="checkbox" v-model="dlc.IsSelected">
+                                        <label class="form-check-label">
+                                            {{dlc.Name}}
                                 </label>
+                            </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -106,7 +133,7 @@
     <footer class="footer">
         <div class="px-3 d-flex justify-content-between">
             <div class="flex-column">
-                <div class="btn-group dropup">
+                <!--<div class="btn-group dropup">
                     <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                         English
@@ -115,7 +142,7 @@
                         <a class="dropdown-item" href="#">Action</a>
                         <a class="dropdown-item" href="#">Another action</a>
                     </div>
-                </div>
+                </div>-->
             </div>
             <div class="flex-column">
                 Copyright
@@ -174,7 +201,9 @@
               apiUrl: "https://sync.qqw.ovh",
             //apiUrl: "http://127.0.0.1:8080",
             message: 'Hello Vue!',
-            allDlc: [],
+            expansionDlc: [],
+            cargoDlc: [],
+            trailerDlc: [],
             fileToUpload: null
         },
         methods: {
@@ -229,15 +258,34 @@
             totalDlcValue() {
                 let total = 1;
 
-                if (!this.allDlc)
-                    return total;
+                if (this.expansionDlc) {
+                    for (let dlc of this.expansionDlc) {
+                        if (!dlc.IsSelected) {
+                            continue;
+                        }
 
-                for (let dlc of this.allDlc) {
-                    if (!dlc.IsSelected) {
-                        continue;
+                        total |= dlc.Value
                     }
+                }
 
-                    total |= dlc.Value
+                if (this.cargoDlc) {
+                    for (let dlc of this.cargoDlc) {
+                        if (!dlc.IsSelected) {
+                            continue;
+                        }
+
+                        total |= dlc.Value
+                    }
+                }
+
+                if (this.trailerDlc) {
+                    for (let dlc of this.trailerDlc) {
+                        if (!dlc.IsSelected) {
+                            continue;
+                        }
+
+                        total |= dlc.Value
+                    }
                 }
 
                 return total;
@@ -246,13 +294,20 @@
         async created() {
             try {
                 let values = (await axios.get(`${this.apiUrl}/dlc`)).data;
-                for (let item in values) {
+                for (let item in values[1]) {
                     let value = values[item];
 
-                    if (value === 1) { // skip base game
-                        continue;
-                    }
-                    this.allDlc.push({Name: toTitleCase(item), Value: value, IsSelected: false});
+                    this.expansionDlc.push({Name: toTitleCase(item), Value: value, IsSelected: false});
+                }
+                for (let item in values[2]) {
+                    let value = values[item];
+
+                    this.cargoDlc.push({Name: toTitleCase(item), Value: value, IsSelected: false});
+                }
+                for (let item in values[3]) {
+                    let value = values[item];
+
+                    this.trailerDlc.push({Name: toTitleCase(item), Value: value, IsSelected: false});
                 }
             } catch (e) {
                 toastr.error(e);
