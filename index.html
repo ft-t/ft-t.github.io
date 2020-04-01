@@ -159,6 +159,7 @@
         integrity="sha256-bd8XIKzrtyJ1O5Sh3Xp3GiuMIzWC42ZekvrMMD4GxRg=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"
         integrity="sha256-3blsJd4Hli/7wCQ+bmgXfOdK7p/ZUMtPXY08jmxSSgk=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
 <script>
     window.toTitleCase = (str) => {
         return str.split('_')
@@ -208,7 +209,15 @@
                         }
                     }));
 
-                    console.log(resp)
+                    console.log(resp);
+
+                    const filename = resp.headers["content-disposition"]
+                        .split(';')
+                        .find(n => n.includes('filename='))
+                        .replace('filename=', '')
+                        .trim();
+
+                    saveAs(new Blob([resp.data], {type: "text/plain;charset=utf-8"}), filename);
                 } catch (e) {
                     console.log(e);
 
