@@ -296,17 +296,17 @@
             try {
                 let values = (await axios.get(`${this.apiUrl}/dlc`)).data;
                 for (let item in values[1]) {
-                    let value = values[item];
+                    let value = values[1][item];
 
                     this.expansionDlc.push({Name: toTitleCase(item), Value: value, IsSelected: false});
                 }
                 for (let item in values[2]) {
-                    let value = values[item];
+                    let value = values[2][item];
 
                     this.cargoDlc.push({Name: toTitleCase(item), Value: value, IsSelected: false});
                 }
                 for (let item in values[3]) {
-                    let value = values[item];
+                    let value = values[3][item];
 
                     this.trailerDlc.push({Name: toTitleCase(item), Value: value, IsSelected: false});
                 }
