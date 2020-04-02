@@ -178,16 +178,24 @@
 
     <div class="modal fade" id="howto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Guide</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <p class="has-line-data" data-line-start="0" data-line-end="1">You need to open <code>config.cfg</code> in the game folder in Documents, and change <code>g_developer</code> to 1 (one), <code>g_save_format</code>to 2 (two), and <code>g_console</code> to 1 (one). Here’s a step-by-step on how to do those changes:</p>
+                    <ol>
+                        <li class="has-line-data" data-line-start="2" data-line-end="3">Make sure the game is closed. This won’t work if you do it with the game running.</li>
+                        <li class="has-line-data" data-line-start="3" data-line-end="4">In the “Game Settings” panel, there is a line saying “Settings Folder: &lt;folder with your ETS2/ATS settings&gt; - Options”. Click “Options” → “Open game config file”. A Notepad window will appear, with the game settings file open.</li>
+                        <li class="has-line-data" data-line-start="4" data-line-end="5">In that Notepad window, go to “Edit” → “Find…” (or hit Ctrl+F). In the search window, type <code>g_developer</code> (notice the underscore) and hit Enter. It should highlight a line in the file that reads <code>uset g_developer &quot;0&quot;</code>. If the number isn’t already <code>1</code>, change it to <code>1</code>, so that it reads <code>uset g_developer &quot;1&quot;</code>.</li>
+                        <li class="has-line-data" data-line-start="5" data-line-end="6">Go to “Edit” → “Find…” (or hit Ctrl+F) again. In the search window, type <code>g_save_format</code> and hit Enter. It should highlight a line in the file that reads <code>uset g_save_format &quot;2&quot;</code> or another number. If the number is not zero, change the number to <code>0</code>, so that it reads <code>uset g_save_format &quot;0&quot;</code>.</li>
+                        <li class="has-line-data" data-line-start="6" data-line-end="7">Go to “Edit” → “Find…” (or hit Ctrl+F) again. In the search window, type <code>g_console</code> and hit Enter. It should highlight a line in the file that reads <code>uset g_console &quot;0&quot;</code>. If the number isn’t already <code>1</code>, change it to <code>1</code>, so that it reads <code>uset g_console &quot;1&quot;</code>.</li>
+                        <li class="has-line-data" data-line-start="7" data-line-end="8">Save the file and close Notepad.</li>
+                    </ol>
                 </div>
             </div>
         </div>
