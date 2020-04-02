@@ -43,14 +43,14 @@
             <div class="row h-100 justify-content-center align-items-center">
                 <div class="col-12">
                     <div class="d-flex justify-content-between">
-                        <div class="flex-column">
+                        <div class="flex-column" v-if="stat">
                             <div class="alert alert-secondary" role="alert">
-                                Job List Generated AT 2020-03-29
+                                Version: {{stat.last_sync}}
                             </div>
                         </div>
-                        <div class="flex-column">
+                        <div class="flex-column" v-if="stat">
                             <div class="alert alert-secondary" role="alert">
-                                Jobs for today : 123455
+                                Jobs for today : {{stat.total_offers}}
                             </div>
                         </div>
                     </div>
@@ -205,7 +205,8 @@
             expansionDlc: [],
             cargoDlc: [],
             trailerDlc: [],
-            fileToUpload: null
+            fileToUpload: null,
+            stat: null
         },
         methods: {
             filesChange(e) {
@@ -293,6 +294,13 @@
             }
         },
         async created() {
+            try{
+                this.stat = (await axios.get(`${this.apiUrl}/stat`)).data;
+            }
+            catch (e) {
+                toastr.error(e);
+                console.log(e);
+            }
             try {
                 let values = (await axios.get(`${this.apiUrl}/dlc`)).data;
                 for (let item in values[1]) {
