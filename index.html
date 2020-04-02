@@ -37,7 +37,6 @@
 </head>
 <body>
 <div id="app">
-    {{totalDlcValue}}
     <main class="container">
         <div class="container h-100">
             <div class="row h-100 justify-content-center align-items-center">
@@ -59,6 +58,7 @@
                     <div class="alert alert-primary" role="alert">
                         You need to have g_save_format set to 2 in your game profile configuration<br>
                         <a href="#" data-toggle="modal" data-target="#howto">How to do that</a>
+                        <a target="_blank" href="https://www.youtube.com/watch?v=C4167eC2YW8">Video</a>
                     </div>
                 </div>
                 <div class="col-12">
@@ -135,24 +135,32 @@
     <footer class="footer">
         <div class="px-3 d-flex justify-content-between">
             <div class="flex-column">
+                <a href="https://github.com/ft-t/ets2-sync" target="_blank">
+                    <img style="height: 57px;"
+                         src="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
+                         alt="github"/>
+                </a>
+
                 <!--<div class="btn-group dropup">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        English
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                    </div>
-                </div>-->
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    English
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                </div>
+            </div>-->
             </div>
-            <div class="flex-column">
-                Copyright
-            </div>
+<!--            <div class="flex-column">-->
+<!--                Copyright-->
+<!--            </div>-->
             <div class="flex-column justify-content-end">
-                <img style="height: 57px"
-                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Go_gopher_favicon.svg/1200px-Go_gopher_favicon.svg.png"
-                     alt="golang"/>
+                <a target="_blank" href="https://golang.org/">
+                    <img style="height: 57px"
+                         src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Go_gopher_favicon.svg/1200px-Go_gopher_favicon.svg.png"
+                         alt="golang"/>
+                </a>
             </div>
         </div>
     </footer>
@@ -294,10 +302,9 @@
             }
         },
         async created() {
-            try{
+            try {
                 this.stat = (await axios.get(`${this.apiUrl}/stat`)).data;
-            }
-            catch (e) {
+            } catch (e) {
                 toastr.error(e);
                 console.log(e);
             }
