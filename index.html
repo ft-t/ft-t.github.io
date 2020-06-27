@@ -60,7 +60,7 @@
                         </div>
                         <div class="flex-column" v-if="stat">
                             <div class="alert alert-secondary" role="alert">
-                                Jobs for today : {{stat.total_offers}}
+                                Jobs for today : ETS: {{stat.total_offers[1]}} ATS: {{stat.total_offers[2]}}
                             </div>
                         </div>
                     </div>
@@ -80,13 +80,24 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            Step 1: Select owned DLC`s
+                            Step 1: Select the game
                         </div>
                         <div class="card-body">
-                            <div class="card mb-1">
+                            <input type="radio" class="ml-3" name="game" value="1" v-model.number="selectedGame"> Euro Truck Simulator
+                            <input type="radio" class="ml-3" name="game" value="2" v-model.number="selectedGame"> American Truck Simulator
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mt-3">
+                    <div class="card">
+                        <div class="card-header">
+                            Step 2: Select owned DLC`s
+                        </div>
+                        <div class="card-body">
+                            <div class="card mb-1" v-if="expansionDlc[selectedGame].length > 0">
                                 <div class="card-body">
                                     <h6 class="card-subtitle text-muted mb-2">Map expansion DLCs</h6>
-                                    <div class="form-check" v-for="dlc in expansionDlc">
+                                    <div class="form-check" v-for="dlc in expansionDlc[selectedGame]">
                                         <input class="form-check-input" type="checkbox" v-model="dlc.IsSelected">
                                         <label class="form-check-label">
                                             {{dlc.Name}}
@@ -94,10 +105,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card mb-1">
+                            <div class="card mb-1" v-if="cargoDlc[selectedGame].length > 0">
                                 <div class="card-body">
                                     <h6 class="card-subtitle text-muted mb-2">Cargo pack DLCs</h6>
-                                    <div class="form-check" v-for="dlc in cargoDlc">
+                                    <div class="form-check" v-for="dlc in cargoDlc[selectedGame]">
                                         <input class="form-check-input" type="checkbox" v-model="dlc.IsSelected">
                                         <label class="form-check-label">
                                             {{dlc.Name}}
@@ -105,10 +116,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card mb-1">
+                            <div class="card mb-1" v-if="trailerDlc[selectedGame].length > 0">
                                 <div class="card-body">
                                     <h6 class="card-subtitle text-muted mb-2">Trailer DLCs</h6>
-                                    <div class="form-check" v-for="dlc in trailerDlc">
+                                    <div class="form-check" v-for="dlc in trailerDlc[selectedGame]">
                                         <input class="form-check-input" type="checkbox" v-model="dlc.IsSelected">
                                         <label class="form-check-label">
                                             {{dlc.Name}}
@@ -122,7 +133,7 @@
                 <div class="col-12 mt-3">
                     <div class="card">
                         <div class="card-header">
-                            Step 2: Upload file
+                            Step 3: Upload file
                         </div>
                         <div class="card-body">
                             <form enctype="multipart/form-data">
@@ -135,7 +146,7 @@
                 <div class="col-12 my-3">
                     <div class="card">
                         <div class="card-header">
-                            Step 3: Sync jobs
+                            Step 4: Sync jobs
                         </div>
                         <div class="card-body">
                             <button type="button" class="btn btn-primary btn-lg btn-block"
@@ -231,14 +242,15 @@
     window.app = new Vue({
         el: '#app',
         data: {
-            apiUrl: "https://sync.qqw.ovh",
-            //apiUrl: "http://127.0.0.1:8080",
+            //apiUrl: "https://sync.qqw.ovh",
+            apiUrl: "http://127.0.0.1:8080",
             message: 'Hello Vue!',
-            expansionDlc: [],
-            cargoDlc: [],
-            trailerDlc: [],
+            expansionDlc: {},
+            cargoDlc: {},
+            trailerDlc: {},
             fileToUpload: null,
-            stat: null
+            stat: null,
+            selectedGame: 1
         },
         methods: {
             filesChange(e) {
@@ -265,6 +277,7 @@
                     let formData = new FormData();
                     formData.append("savefile", this.fileToUpload);
                     formData.append("dlc", this.totalDlcValue);
+                    formData.append("game", this.selectedGame);
 
                     let resp = (await axios.post(`${this.apiUrl}/save_upload`, formData, {
                         headers: {
@@ -292,8 +305,8 @@
             totalDlcValue() {
                 let total = 1;
 
-                if (this.expansionDlc) {
-                    for (let dlc of this.expansionDlc) {
+                if (this.expansionDlc[this.selectedGame]) {
+                    for (let dlc of this.expansionDlc[this.selectedGame]) {
                         if (!dlc.IsSelected) {
                             continue;
                         }
@@ -302,8 +315,8 @@
                     }
                 }
 
-                if (this.cargoDlc) {
-                    for (let dlc of this.cargoDlc) {
+                if (this.cargoDlc[this.selectedGame]) {
+                    for (let dlc of this.cargoDlc[this.selectedGame]) {
                         if (!dlc.IsSelected) {
                             continue;
                         }
@@ -312,8 +325,8 @@
                     }
                 }
 
-                if (this.trailerDlc) {
-                    for (let dlc of this.trailerDlc) {
+                if (this.trailerDlc[this.selectedGame]) {
+                    for (let dlc of this.trailerDlc[this.selectedGame]) {
                         if (!dlc.IsSelected) {
                             continue;
                         }
@@ -334,20 +347,29 @@
             }
             try {
                 let values = (await axios.get(`${this.apiUrl}/dlc`)).data;
-                for (let item in values[1]) {
-                    let value = values[1][item];
+                for (let game in values) {
+                    if(!this.expansionDlc.hasOwnProperty(game))
+                        this.$set(this.expansionDlc, game, []);
+                    if(!this.cargoDlc.hasOwnProperty(game))
+                        this.$set(this.cargoDlc, game, []);
+                    if(!this.trailerDlc.hasOwnProperty(game))
+                        this.$set(this.trailerDlc, game, []);
 
-                    this.expansionDlc.push({Name: toTitleCase(item), Value: value, IsSelected: false});
-                }
-                for (let item in values[2]) {
-                    let value = values[2][item];
+                    for (let item in values[game][1]) {
+                        let value = values[game][1][item];
 
-                    this.cargoDlc.push({Name: toTitleCase(item), Value: value, IsSelected: false});
-                }
-                for (let item in values[3]) {
-                    let value = values[3][item];
+                        this.expansionDlc[game].push({Name: toTitleCase(item), Value: value, IsSelected: false});
+                    }
+                    for (let item in values[game][2]) {
+                        let value = values[game][2][item];
 
-                    this.trailerDlc.push({Name: toTitleCase(item), Value: value, IsSelected: false});
+                        this.cargoDlc[game].push({Name: toTitleCase(item), Value: value, IsSelected: false});
+                    }
+                    for (let item in values[game][3]) {
+                        let value = values[game][3][item];
+
+                        this.trailerDlc[game].push({Name: toTitleCase(item), Value: value, IsSelected: false});
+                    }
                 }
             } catch (e) {
                 toastr.error(e);
