@@ -60,7 +60,7 @@
                         </div>
                         <div class="flex-column" v-if="stat">
                             <div class="alert alert-secondary" role="alert">
-                               Jobs:<br>ETS: {{stat.total_offers[1]}}<br>ATS: {{stat.total_offers[2]}}
+                               Jobs:<br>ETS: {{stat.total_offers[1]}}<br>ATS: {{stat.total_offers[2]}}<br>ETS (ProMods): {{stat.total_offers[3]}}
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
 <!--                </div>-->
                 <div class="col-12">
                     <div class="alert alert-info" role="alert">
-                        Supported versions:<br>ETS: 1.37+<br>ATS: 1.37+
+                        Supported versions:<br>ETS: 1.37+<br>ATS: 1.37+<br>ETS (ProMods): 1.37+ (game), 2.46 (ProMods)
                     </div>
                 </div>
                 <div class="col-12">
@@ -90,6 +90,7 @@
                         <div class="card-body">
                             <input type="radio" class="ml-3" name="game" value="1" v-model.number="selectedGame"> Euro Truck Simulator
                             <input type="radio" class="ml-3" name="game" value="2" v-model.number="selectedGame"> American Truck Simulator
+                            <input type="radio" class="ml-3" name="game" value="3" v-model.number="selectedGame"> Euro Truck Simulator (ProMods)
                         </div>
                     </div>
                 </div>
@@ -98,7 +99,7 @@
                         <div class="card-header">
                             Step 2: Select owned DLC`s
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" v-if="expansionDlc && expansionDlc[selectedGame]">
                             <div class="card mb-1" v-if="expansionDlc[selectedGame].length > 0">
                                 <div class="card-body">
                                     <h6 class="card-subtitle text-muted mb-2">Map expansion DLCs</h6>
